@@ -2,33 +2,32 @@ library(dplyr)
 library(data.table)
 
 ##Getting variable names for the train and test raw data
-feat_dft <- tbl_df(fread("UCI HAR Dataset/features.txt"))
+feat_df <- tbl_df(fread("UCI HAR Dataset/features.txt"))
 
-## Reading and preparing the train data frame table
-tran_dft <- tbl_df(read.table("UCI HAR Dataset/train/X_train.txt"))
+## Reading and preparing the train and test data frame 
+#tran_df <- tbl_df(read.table("UCI HAR Dataset/train/X_train.txt", colClasses = "numeric", col.names = feat_df$V2))
+#test_df <- tbl_df(read.table("UCI HAR Dataset/test/X_test.txt",   colClasses = "numeric", col.names = feat_df$V2))
 
-# setting the column names
-colnames(tran_dft) <- paste(feat_dft$V1, feat_dft$V2)
+tran_df <- read.table("UCI HAR Dataset/train/X_train.txt", colClasses = "numeric", col.names = feat_df$V2)
+test_df <- read.table("UCI HAR Dataset/test/X_test.txt",   colClasses = "numeric", col.names = feat_df$V2)
 
-# Selecting the mean and standard deviation columns
-tran_dft <-  select(tran_dft, contains("mean()"), contains("std()"))
+# Subsetting train and test data with mean and standard deviation columns
+tran_df_ss <-  select(tran_df, contains("mean.."), contains("std.."))
+test_df_ss <-  select(test_df, contains("mean.."), contains("std.."))
 
-## getting subject and activity data
-tran_sbjc <- read.table("UCI HAR Dataset/train/subject_train.txt", 
-				col.names = "subject") 
-tran_actv <- read.table("UCI HAR Dataset/train/y_train.txt", 
-				col.names = "activity")
-#colnames(tran_sbjc) <- "Subject"
-#colnames(tran_actv) <- "Activity"
-
-## Adding subject and activity columns to table data frame
-tran_dft <- cbind(tran_sbjc, tran_actv, tran_dft)
+## getting subject and activity data for train and test
+tran_sbjc <- read.table("UCI HAR Dataset/train/subject_train.txt", col.names = "subject") 
+tran_actv <- read.table("UCI HAR Dataset/train/y_train.txt", col.names = "activity")
+test_sbjc <- read.table("UCI HAR Dataset/test/subject_test.txt", col.names = "subject") 
+test_actv <- read.table("UCI HAR Dataset/test/y_test.txt", col.names = "activity")
 
 
+## Adding subject, activity, and observationType columns to table data frames
+tran_dft_ss <- tbl_df(cbind(tran_sbjc, tran_actv, tran_df_ss))
+tran_dft_ss <- mutate(tran_dft_ss, obsType = "train")
+test_dft_ss <- tbl_df(cbind(test_sbjc, test_actv, test_df_ss))
+test_dft_ss <- mutate(test_dft_ss, obsType = "test")
 
-fTest <- "UCI HAR Dataset/test/X_test.txt"
-test_dft <- tbl_df(read.table(fTest))
-colnames(test_dft) <- paste(feat_dft$V1, feat_dft$V2)
-test_dft <-  select(test_dft, contains("mean()"), contains("std()"))
+## Merging the two table data frames together
+full_dft <- full_join(tran_dft_ss, test_dft_ss) 
 
-m <- rbind(tran_dft, test_dft)
