@@ -4,27 +4,27 @@ output: html_document
 ---
 -
 
-The objective of this README file is to explain the steps taken trhough the analysis automated by means of the script run_analysis.R, available at this repository.
+The purpose of this README file is to explain the steps performed by the automated processing of data using the script "run_analysis.R" available in this repository.
 
-The entire execution of this script is automated and to run it just load the file ***run_analysis.R*** to the working directory of the R environment, where should be present de Samsung file (getdata-projectfiles-UCI HAR Dataset.zip), and source it.
+The entire execution of this script is automated and to run it simply load the file "run_analysis.R" for the R environment working directory, where it should be present Samsung's file (GetData-PROJECTFiles UCI-HAR Dataset.zip), and source it.
 ```{r}
 source('run_analysis.R')
 ```
 
 -
-The Analysis starts with setting the environment up. At first all the libraries that will be used are loaded in R environment.
+The analysis begins with the environment setup. First, all libraries that are used are loaded into the R environment.
 ```{r}
 library(dplyr)
 library(data.table)
 library(tidyr)
 ```
 
-As stated in the assignment, the premisse is that the Samsung file is present in the working directory, the next step is uncompress it and save the files using the original path relative to the working directory:
+As stated in the assignment, the premise is that the Samsung's file is present in the working directory. The next step is to unzip it and save the files using the original path in the structure of the compressed file. This path is a path relative to the working directory:
 ```{r}
 unzip("getdata-projectfiles-UCI HAR Dataset.zip")
 ```
 
-Next, creates variables to hold the paths and file names of the files that will be used in the analysis:
+Next, we create the variables that will keep the paths and names of data files that will be used in the analysis:
 ```{r}
 ## Defining file names to get data
 feat_fn <-  "UCI HAR Dataset/features.txt"
