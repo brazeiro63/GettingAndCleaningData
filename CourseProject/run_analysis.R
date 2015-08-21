@@ -20,11 +20,11 @@ feat_df <- tbl_df(fread(feat_fn))
 
 ## Reading and preparing the train and test data
 tran_df   <- read.table(train_fn, colClasses = "numeric", col.names = feat_df$V2)
-tran_sbjc <- read.table(train_sbjc_fn, col.names = "subjectID")
-tran_actv <- read.table(train_actv_fn, col.names = "activityID")
+tran_sbjc <- read.table(train_sbjc_fn, col.names = "subject_id")
+tran_actv <- read.table(train_actv_fn, col.names = "activity_id")
 test_df   <- read.table(test_fn,  colClasses = "numeric", col.names = feat_df$V2)
-test_sbjc <- read.table(test_sbjc_fn,  col.names = "subjectID")
-test_actv <- read.table(test_actv_fn,  col.names = "activityID")
+test_sbjc <- read.table(test_sbjc_fn,  col.names = "subject_id")
+test_actv <- read.table(test_actv_fn,  col.names = "activity_id")
 actv_labl <- read.table(actv_labl_fn, col.names = c("id", "name"))
 
 ## Merging train and test tables, including subject and activity data
@@ -33,35 +33,22 @@ step1 <- cbind(rbind(tran_sbjc, test_sbjc),
                rbind(tran_df, test_df))
 
 ## Subsetting mean and standard deviation columns
-## Changing activityID by activityName (step3)
+## Changing activity_id by activity_name (step3)
 step2 <- step1 %>%
-    select(subjectID, activityID, contains("mean.."), contains("std.."),
+    select(subject_id, activity_id, contains("mean.."), contains("std.."),
            -starts_with("angle")) %>%
-    mutate(activityName = actv_labl$name[activityID])
-
+    mutate(activity_name = actv_labl$name[activity_id])
 
 ## Changing column names to other more descriptive
 step4 <- copy(step2)
 names(step4) <- gsub("\\.","_",gsub("\\.\\.","",names(step2)))
-tmp1 <-names(step4)
-tmp <- sapply(tmp1[3:68],function(x){x<-sub("t","time",x)})
-tmp <- sapply(tmp,function(x){x<-sub("f","frequency",x)})
-tmp <- sapply(tmp,function(x){x<-sub("Acc","Accelaration",x)})
-tmp <- sapply(tmp,function(x){x<-sub("_mean","Mean",x)})
-tmp <- sapply(tmp,function(x){x<-sub("_std","StandardDeviation",x)})
-tmp <- sapply(tmp,function(x){x<-sub("_stimed","StandardDeviation",x)})
-tmp <- sapply(tmp,function(x){x<-sub("BodyBody","Body",x)})
-tmp1[3:68]<-tmp
-names(step4) <- tmp1
 
 ## Tidying data
 step5 <- step4 %>%
-  select(subjectID, activityName,
-         timeBodyAccelarationMean_X:frequencyBodyGyroJerkMagStandardDeviation) %>%
-  gather(measureDomain, value,
-         timeBodyAccelarationMean_X:frequencyBodyGyroJerkMagStandardDeviation)%>%
-  group_by(subjectID, activityName, measureDomain) %>%
-  summarise(averageValue = mean(value))
+  select(subject_id, activity_name, 3:68) %>%
+  gather(measure_domain, value, 3:68)%>%
+  group_by(subject_id, activity_name, measure_domain) %>%
+  summarise(average_value = mean(value))
 
 ## Writing resulting file
 write.table(step5, file = "step5ResultFile.txt", row.names = FALSE)
