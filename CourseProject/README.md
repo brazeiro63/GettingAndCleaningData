@@ -64,19 +64,20 @@ step1 <- cbind(rbind(tran_sbjc, test_sbjc),
                rbind(tran_df, test_df))
 ```
 
-The next to do is subset the  the mean and standard deviation columns from the resulting data from the previous step.
-To achieve this goal was considered mean and standard deviation the columns wich the name has the expressions "mean()" or "std()". As 
-
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
+The next step is to extract the subset of columns mean and standard deviation of the data resulting from the previous step.
+To achieve this goal were considered "mean" and "standard deviation" columns whose name contains the words "mean()" or "std()".
+Since the file containing the names of measures was read with the "fread ()" and non alphanumeric characters have been converted to points, the expression used to select the columns and considered that the terms used were "mean.." and "std..".
+At this point has been recovered, also the names of the activities, that is to replace the number in the final result.
+```{r}
 ## Subsetting mean and standard deviation columns
 ## Changing activityID by activityName (step3)
 step2 <- step1 %>%
     select(subjectID, activityID, contains("mean.."), contains("std.."),
            -starts_with("angle")) %>%
     mutate(activityName = actv_labl$name[activityID])
+```
 
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ## Changing column names to other more descriptive
 step4 <- copy(step2)
