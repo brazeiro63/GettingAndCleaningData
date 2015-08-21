@@ -76,29 +76,21 @@ step2 <- step1 %>%
            -starts_with("angle")) %>%
     mutate(activityName = actv_labl$name[activityID])
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
+The task instructions specify that you need to assign more meaningful names for the columns. One way to read the data file would be without assigning names to the columns, which would result in the assignment of standardized names (V1 to Vn). However, reading the measurements file, they were assigned names to the columns based on the file "features.txt". Thus the column names already have meaning in the field of data. The meaning of each term used in the names of the columns is described in the code book.
+The legibility and meaning of the column names was affected by the substitution of characters mentioned above. To fix the problem simply replace the dots (".") By other tabs more appropriate to read, to make it more enjoyable. In this case, underscores ("_").
+```{r}
 ## Changing column names to other more descriptive
 step4 <- copy(step2)
 names(step4) <- gsub("\\.","_",gsub("\\.\\.","",names(step2)))
-tmp1 <-names(step4)
-tmp <- sapply(tmp1[3:68],function(x){x<-sub("t","time",x)})
-tmp <- sapply(tmp,function(x){x<-sub("f","frequency",x)})
-tmp <- sapply(tmp,function(x){x<-sub("Acc","Accelaration",x)})
-tmp <- sapply(tmp,function(x){x<-sub("_mean","Mean",x)})
-tmp <- sapply(tmp,function(x){x<-sub("_std","StandardDeviation",x)})
-tmp <- sapply(tmp,function(x){x<-sub("_stimed","StandardDeviation",x)})
-tmp <- sapply(tmp,function(x){x<-sub("BodyBody","Body",x)})
-tmp1[3:68]<-tmp
-names(step4) <- tmp1
+```
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
 
 ## Tidying data
 step5 <- step4 %>%
-  select(subjectID, activityName,
-         timeBodyAccelarationMean_X:frequencyBodyGyroJerkMagStandardDeviation) %>%
-  gather(measureDomain, value,
-         timeBodyAccelarationMean_X:frequencyBodyGyroJerkMagStandardDeviation)%>%
+  select(subjectID, activityName, 3:68) %>%
+  gather(measureDomain, value, 3:68)%>%
   group_by(subjectID, activityName, measureDomain) %>%
   summarise(averageValue = mean(value))
 
