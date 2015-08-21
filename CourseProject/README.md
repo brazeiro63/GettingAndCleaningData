@@ -2,7 +2,7 @@
 title: "README.md"
 output: html_document
 ---
-
+-
 
 The objective of this README file is to explain the steps taken trhough the analysis automated by means of the script run_analysis.R, available at this repository.
 
@@ -36,13 +36,9 @@ As the variable names of the data set was stored in a separeted file, load that 
 ##Getting variable names for the train and test raw data
 feat_df <- tbl_df(fread(feat_fn))
 ```
-
-
-
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-
+The first step of the analysis is to merge the data of the train and test data. Each of this is composed by three data files. One has the subject identification (subjectID), other has the activity identification (activityID) and the last helds the measurements for all other variables. 
+To achieve the step goal, first load all the files into data tables:
+```{r}
 ## Reading and preparing the train and test data
 tran_df   <- read.table(train_fn, colClasses = "numeric", col.names = feat_df$V2)
 tran_sbjc <- read.table(train_sbjc_fn, col.names = "subjectID")
@@ -51,11 +47,19 @@ test_df   <- read.table(test_fn,  colClasses = "numeric", col.names = feat_df$V2
 test_sbjc <- read.table(test_sbjc_fn,  col.names = "subjectID")
 test_actv <- read.table(test_actv_fn,  col.names = "activityID")
 actv_labl <- read.table(actv_labl_fn, col.names = c("id", "name"))
-
+```
+Then combine the files in this specific way: 
+combine the corresponding files from train and test sets (train subject with test sugject, train activity with test activity and train measurements with test measurements) in this order, then combine the resulting data tables (all subjects, all activities and all measurements) in this order.
+Doing this the step 1 is acomplished. The result is saved as "step1" variable.
+```{r}
 ## Merging train and test tables, including subject and activity data
 step1 <- cbind(rbind(tran_sbjc, test_sbjc),
                rbind(tran_actv, test_actv),
                rbind(tran_df, test_df))
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ## Subsetting mean and standard deviation columns
 ## Changing activityID by activityName (step3)
