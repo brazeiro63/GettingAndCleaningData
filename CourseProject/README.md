@@ -6,6 +6,12 @@ output: html_document
 
 The objective of this README file is to explain the steps taken trhough the analysis automated by means of the script run_analysis.R, available at this repository.
 
+The entire execution of this script is automated and to run it just load the file ***run_analysis.R*** to the working directory of the R environment, where should be present de Samsung file (getdata-projectfiles-UCI HAR Dataset.zip), and source it.
+```{r}
+source('run_analysis.R')
+```
+
+-
 The Analysis starts with setting the environment up. At first all the libraries that will be used are loaded in R environment.
 ```{r}
 library(dplyr)
@@ -37,7 +43,7 @@ As the variable names of the data set was stored in a separeted file, load that 
 feat_df <- tbl_df(fread(feat_fn))
 ```
 The first step of the analysis is to merge the data of the train and test data. Each of this is composed by three data files. One has the subject identification (subjectID), other has the activity identification (activityID) and the last helds the measurements for all other variables. 
-To achieve the step goal, first load all the files into data tables:
+To achieve the step goal, first load all the files into data tables. On loading, the colClasses was set to "numeric" to haldle appropriately the numeric content of the measurement data and the names of the columns were set too. As the column names to the measurement data were stored in "feat_df", the vector feat_df$V2 has it.
 ```{r}
 ## Reading and preparing the train and test data
 tran_df   <- read.table(train_fn, colClasses = "numeric", col.names = feat_df$V2)
@@ -57,6 +63,9 @@ step1 <- cbind(rbind(tran_sbjc, test_sbjc),
                rbind(tran_actv, test_actv),
                rbind(tran_df, test_df))
 ```
+
+The next to do is subset the  the mean and standard deviation columns from the resulting data from the previous step.
+To achieve this goal was considered mean and standard deviation the columns wich the name has the expressions "mean()" or "std()". As 
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
