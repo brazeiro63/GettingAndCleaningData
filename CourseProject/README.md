@@ -83,16 +83,19 @@ The legibility and meaning of the column names was affected by the substitution 
 step4 <- copy(step2)
 names(step4) <- gsub("\\.","_",gsub("\\.\\.","",names(step2)))
 ```
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-
-
+The final part of the task is to make the data tidy. For the tidying of data following procedures were performed: first the columns which must be part of the final result, which are subjectID, activityName and the remaining columns (3 to 68) were selected. The columns 3 to 68 correspond to the domains of measurements which were performed in the experiment. Then the data were grouped by the subjectID, activityName and measurementDomain and was calculated the average of the values for each group and the result was stored in the column averageValue.
+At this point the data was considered tidy, once each column represents one variable, and each row has an specific measurement. In the case, the average value of the measurements for each domain.
+To do this were used the function of tidyr package as follows:
+```{r}
 ## Tidying data
 step5 <- step4 %>%
   select(subjectID, activityName, 3:68) %>%
   gather(measureDomain, value, 3:68)%>%
   group_by(subjectID, activityName, measureDomain) %>%
   summarise(averageValue = mean(value))
-
+```
+Finnaly the resulting file was writen down without row names, as stated on the assignment.
+```{R}
 ## Writing resulting file
 write.table(step5, file = "step5ResultFile.txt", row.names = FALSE)
+```
