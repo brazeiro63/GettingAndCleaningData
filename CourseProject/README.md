@@ -94,7 +94,7 @@ step5 <- step4 %>%
   group_by(subjectID, activityName, measureDomain) %>%
   summarise(averageValue = mean(value))
 ```
-Finnaly the resulting file was writen down without row names, as stated on the assignment.
+Finaly the resulting file was write, without row names, as stated on the assignment.
 ```{R}
 ## Writing resulting file
 write.table(step5, file = "step5ResultFile.txt", row.names = FALSE)
