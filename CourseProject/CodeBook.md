@@ -1,5 +1,5 @@
 ---
-title: "Codebook template"
+title: "Codebook"
 author: "Paulo Ricardo Brazeiro de Carvalho"
 date: "Aug,21 2015"
 output:
