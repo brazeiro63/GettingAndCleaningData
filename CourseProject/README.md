@@ -1,6 +1,10 @@
 ---
 title: "README.md"
-output: html_document
+author: "Paulo Ricardo Brazeiro de Carvalho"
+date: "Aug,21 2015"
+output: 
+  html_document
+  keep_md:TRUE
 ---
 
 
