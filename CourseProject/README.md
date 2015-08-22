@@ -2,9 +2,9 @@
 title: "README.md"
 author: "Paulo Ricardo Brazeiro de Carvalho"
 date: "Aug,21 2015"
-output: 
-  html_document
-  keep_md:TRUE
+output:
+  html_document:
+    keep_md: yes
 ---
 
 
