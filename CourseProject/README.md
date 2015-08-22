@@ -2,13 +2,13 @@
 title: "README.md"
 output: html_document
 ---
--
+
 
 The purpose of this README file is to explain the steps performed by the automated processing of data using the script "run_analysis.R" available in this repository.
 
 The entire execution of this script is automated and to run it simply load the file "run_analysis.R" for the R environment working directory, where it should be present Samsung's file (GetData-PROJECTFiles UCI-HAR Dataset.zip), and source it.  
 
-```{r,echo=TRUE}
+```{r}
 source('run_analysis.R')
 ```
 

@@ -69,7 +69,7 @@ The following files are available for the train and test data. Their description
   + gather the measurement columns in a single column named measurement_domain;
 
 ###Cleaning of the data
-The cleaning process is just summarize the observations into the average for each subject and activity. Further detail available in the [README.md](https://github.com/brazeiro63/GettingAndCleaningData/blob/master/CourseProject/README.md)
+The cleaning process is just summarize the observations into the average for each subject and activity. Further detail available in the [README.html](https://github.com/brazeiro63/GettingAndCleaningData/blob/master/CourseProject/README.html)
 
 
 ##Description of the variables in the step5ResultFile.txt file
